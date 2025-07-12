@@ -102,7 +102,7 @@ public class MyOrderService {
 	            return new MyOrderDTO(
 	                order.getId(),
 	                order.getOrderDate(),
-	                order.getOrder_Id(),
+	                order.getOrderId(),
 	                order.getOrderTotal(),
 	                order.getTotalQuantity(),
 	                order.getUser().getId(), // Get user ID
@@ -139,7 +139,7 @@ public class MyOrderService {
 		MyOrder myOrder = new MyOrder();
 		myOrder.setUser(user);
 		myOrder.setOrderDate(new java.util.Date()); // Set current date for the order
-		 myOrder.setOrder_Id(orderId);
+		 myOrder.setOrderId(orderId);
 //		// Calculate the total price and quantity from the cart items
 		double totalPrice = 0.0;
 		int totalQuantity = 0;
@@ -175,4 +175,13 @@ public class MyOrderService {
 		return myOrderRepository.save(myOrder);
 	}
 
+	
+	 public Optional<MyOrder> findOrderByOrder_Id(String orderId) {
+	        return myOrderRepository.findByOrderId(orderId);
+	    }
+
+	    // ✅ Delete a given order
+	    public void deleteOrder(MyOrder order) {
+	        myOrderRepository.delete(order);
+	    }
 }

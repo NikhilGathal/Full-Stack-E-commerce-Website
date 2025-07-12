@@ -11,6 +11,7 @@ import com.jsp.SpringBoot_React.entity.User;
 import com.jsp.SpringBoot_React.repo.CartItemRepository;
 import com.jsp.SpringBoot_React.service.CartService;
 import com.jsp.SpringBoot_React.service.MyOrderService;
+import com.jsp.SpringBoot_React.service.ProductService;
 import com.jsp.SpringBoot_React.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,9 @@ public class MyOrderController {
 
 	@Autowired
 	private CartItemRepository cartItemRepository;
+	
+	@Autowired
+	private ProductService productService;
 	
 	 @GetMapping("/allUsersWithOrders")
 	 public ResponseEntity<List<MyOrderDTO>> getAllUsersWithOrders() {
@@ -99,5 +103,39 @@ public class MyOrderController {
 	}
 
 	// Helper method to convert the cartItems string into a List<CartItem>
+	
+	
+	@DeleteMapping("/cancel/{orderId}")
+	public ResponseEntity<String> cancelOrder(@PathVariable String orderId) {
+	    try {
+	        Optional<MyOrder> optionalOrder = myOrderService.findOrderByOrder_Id(orderId);
+	        if (!optionalOrder.isPresent()) {
+	            return new ResponseEntity<>("Order not found", HttpStatus.NOT_FOUND);
+	        }
+
+	        MyOrder order = optionalOrder.get();
+
+	        // ✅ Loop through each item to restore quantity
+	        for (OrderItem item : order.getOrderItems()) {
+	            Long productId = item.getProduct().getId();
+	            int quantity = item.getQuantity();
+
+	            // Increase the count using productService
+	            productService.updateStock(productId, quantity);
+	        }
+
+	        // ✅ Delete the order after restoring stock
+	        myOrderService.deleteOrder(order);
+
+	        return new ResponseEntity<>("Order cancelled and stock restored successfully", HttpStatus.OK);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<>("Failed to cancel order", HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+
+
+	
+	
 
 }

@@ -31,7 +31,7 @@ public class MyOrder {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String order_Id;
+	private String orderId;
 
 	private Date orderDate;
 	// Store complete product details in MyOrder (Unidirectional relation)
@@ -48,6 +48,5 @@ public class MyOrder {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderItem> orderItems;
-
 
 }
