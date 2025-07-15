@@ -1,10 +1,13 @@
 # Full Stack E-commerce Website
-•	Developed a full-stack e-commerce application using React, Redux, and Spring Boot, connected via RESTful APIs, to deliver a seamless shopping experience.
 
-•	Implemented user authentication (signup, login, password recovery), product search, and full cart/wishlist management functionality (add, remove, update quantity).
+• Developed a full-stack, single-page e-commerce application using React, Redux, and Spring Boot, connected via RESTful APIs to deliver a seamless shopping experience.
 
-•	Enabled order placement with email confirmations and built a purchase history and profile management module for users to update personal details (username, address, phone number, email).
+• Implemented core features including user authentication (signup, login, password recovery), product search, and full cart/wishlist management (add, remove, update quantity).
 
-•	Built admin functionalities to manage products and view detailed customer purchases (items, quantity, price), along with dynamic stock tracking and “Out of Stock” labeling that disables cart actions for unavailable items.
+• Enabled order placement with email confirmations, and built a purchase history and profile management module for users to update personal details.
 
-•	Integrated automated email notifications for user transactions and ensured a responsive, optimized interface.
+• Executed comprehensive admin functionalities to add, edit, and delete products, and view detailed user purchase data (items, quantities, and prices).
+
+• Integrated automated email notifications for user transactions and ensured a responsive, optimized, and intuitive user interface.
+
+• Automated stock availability checks, restricted interactions with out-of-stock items, and incorporated order cancellation support with real-time email notifications.
