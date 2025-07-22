@@ -7,10 +7,6 @@ import { deleteProduct } from '../store/slices/productsSlice'
 
 export default function Product({ productId, title, rating, price, imageUrl }) {
   const username = localStorage.getItem('username')
-  // console.log(rating.rate);
-  //  console.log('count is '+   rating.count);
-  // const existingAdmin = JSON.parse(localStorage.getItem('Admin')) || {}
-  // const isAdmin = username === existingAdmin.username;
   const dispatch = useDispatch()
   const navigate = useNavigate() // For navigation to UpdateProduct page
   const [, , , , ,] = useOutletContext()
@@ -63,21 +59,7 @@ export default function Product({ productId, title, rating, price, imageUrl }) {
         console.error('Error deleting product:', error)
       })
   }
-  // Handle add to cart
-  const handleAddToCart = () => {
-    // const cartKey = username ? `${username}cart` : 'cartItems';
-    // let storedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
-    // const existingProductIndex = storedCart.findIndex(item => item.productId === productId);
-    // if (existingProductIndex !== -1) {
-    //   storedCart[existingProductIndex].quantity += 1;
-    // } else {
-    //   storedCart.push({ productId, quantity: 1 });
-    // }
-    // // Save updated cart
-    // localStorage.setItem(cartKey, JSON.stringify(storedCart));
-    // // Dispatch to add cart in Redux
-    // dispatch(addCartItem({ productId }));
-  }
+
   // database
 
   const [userId, setUserId] = useState(null)
@@ -137,7 +119,6 @@ export default function Product({ productId, title, rating, price, imageUrl }) {
 
       // Dispatch to update Redux store
       dispatch(addCartItem({ productId}))
-      console.log('Added item to localStorage cart:', storedCart)
     } else {
       // console.log(userId)
       try {
@@ -163,12 +144,6 @@ export default function Product({ productId, title, rating, price, imageUrl }) {
   } else {
     console.error('❌ Failed to update stock in DB after adding to cart.');
   }
-
-
-
-
-
-
         } else {
           console.error('Failed to add item to cart')
         }
@@ -252,7 +227,12 @@ export default function Product({ productId, title, rating, price, imageUrl }) {
       <div className="price-rating-container">
         <p className="rating">{+rating.rate} ★ ★ ★ ★</p>
          {localStorage.getItem('isAdmin') === 'true' && (
-  <p className="price">Stock : {productStock}</p>
+  <p
+  className="price"
+  style={productStock === 0 ? { color: "red", fontWeight: "bold" } : {}}
+>
+  {productStock === 0 ? "Out of Stock" : `Stock: ${productStock}`}
+</p>
 )}
         <p className="price">${price}</p>
       </div>

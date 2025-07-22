@@ -73,40 +73,6 @@ export default function CartItem({
     }
   }, []); // Empty dependency array ensures this effect runs only once
   
-  // Empty dependency array to run the effect only once on mount
-
-  // const handleRemove = () => {
-  //   if (userId) {
-  //     fetch(
-  //       `http://localhost:8080/api/cart/remove?userId=${userId}&productId=${productId}`,
-  //       {
-  //         method: 'DELETE', // Use DELETE method to remove the item
-  //       }
-  //     )
-  //       .then((response) => response.text()) // Use .text() to handle plain text response
-  //       .then((data) => {
-  //         console.log('Response:', data) // Log the response to check if it's plain text
-  //         // Handle the plain text response
-  //         if (data === 'Product removed from cart') {
-  //           dispatch(removeCartItem({ productId })) // Dispatch action to Redux to remove the item from the cart
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error removing item from cart:', error)
-  //       })
-  //   } else {
-      
-  //     let storedCart = JSON.parse(localStorage.getItem(cartKey)) || []
-  //     storedCart = storedCart.filter((item) => item.productId !== productId)
-
-  //     // Save updated cart to localStorage
-  //     localStorage.setItem(cartKey, JSON.stringify(storedCart))
-
-  //     // Dispatch to update Redux store
-  //     dispatch(removeCartItem({ productId }))
-  //     console.log('Removed item from localStorage cart:', storedCart)
-  //   }
-  // }
 
 const handleRemove = async () => {
   const cartKey = 'cartItems';

@@ -47,7 +47,7 @@ public class User {
 	private List<WishlistItem> wishlistItems;
 
 	 @JsonManagedReference
-	 @OneToMany(mappedBy = "user", fetch = FetchType.LAZY ,cascade = CascadeType.REMOVE, orphanRemoval = true)
+	 @OneToMany(mappedBy = "user", fetch = FetchType.LAZY ,cascade = CascadeType.ALL, orphanRemoval = true)
 	    private List<MyOrder> myOrders;
 
 }

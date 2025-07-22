@@ -81,35 +81,6 @@ const ItemDetail = () => {
      setTimeout(() => navigate('/Home'), 1000);
   }
 
-  // useEffect(() => {
-  //   // Fetch item details from localStorage
-  //   const fetchItemFromLocalStorage = () => {
-  //     try {
-
-  //       fetch('http://localhost:8080/api/products')
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         // console.log(data);
-
-  //         setpdt(data)
-  //         console.log(pdt);
-
-  //       })
-  //         // JSON.parse(localStorage.getItem('productsList')) || []
-  //       const product = pdt.find((p) => p.id === productId) // Find the product by ID
-  //       if (!product) {
-  //         throw new Error('Product not found')
-  //       }
-  //       setItem(product) // Set the product as the state
-  //       setLoading(false) // Set loading to false
-  //     } catch (err) {
-  //       setError(err.message) // Handle error
-  //       setLoading(false) // Set loading to false
-  //     }
-  //   }
-
-  //   fetchItemFromLocalStorage()
-  // }, [productId])
 
   useEffect(() => {
     // Fetch item details from the backend API
@@ -322,6 +293,14 @@ const ItemDetail = () => {
       <button onClick={() => handleDelete(productId)}>
         Remove Product
       </button>
+
+<p
+  className="outofs"
+  style={productStock === 0 ? { color: "red", fontWeight: "bold" } : {}}
+>
+  {productStock === 0 ? "Out of Stock" : `Stock: ${productStock}`}
+</p>
+
       <button onClick={handleUpdateProduct}>Edit Product</button>
     </>
   ) : (
@@ -341,7 +320,7 @@ const ItemDetail = () => {
 </div>
         </div>
       </div>
-      <Footer dark={dark} />
+      {/* <Footer dark={dark} /> */}
     </>
   )
 }

@@ -244,20 +244,7 @@ const sendCancelOrderEmail = async ({ username, cartItems, order_Id }) => {
                       hour12: true,
                     })}
                   </div>
-                  {/* <div className="grid-item orders-column">
-                    {order.orderItems.map((orderItem, itemIndex) => (
-                      <Myordersitem
-                        key={`${order.id}-${orderItem.product.id}-${itemIndex}`}
-                        productId={orderItem.product.id}
-                        title={orderItem.product.title}
-                        price={orderItem.product.price}
-                        quantity={orderItem.quantity}
-                        imageUrl={orderItem.product.image}
-                        rating={orderItem.product.rating.rate}
-                        index={itemIndex}
-                      />
-                    ))}
-                  </div> */}
+                 
                   <div className="grid-item orders-column">
                     {order.orderItems.map((orderItem, itemIndex) => (
                       
@@ -302,3 +289,4 @@ const sendCancelOrderEmail = async ({ username, cartItems, order_Id }) => {
 }
 
 export default Myorders
+

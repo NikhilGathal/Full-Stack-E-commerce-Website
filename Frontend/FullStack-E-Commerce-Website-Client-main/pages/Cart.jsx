@@ -17,6 +17,7 @@ export default function Cart() {
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(true)
   const cartItems = useSelector(getAllCartItems)
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false)
   // console.log(cartItems);
 
   const navigate = useNavigate()
@@ -70,16 +71,22 @@ export default function Cart() {
   if (isLoading) {
     return (
       <div className="admin">
-      <h1>Loading Cart Items...</h1>
-    </div>
+        <h1>Loading Cart Items...</h1>
+      </div>
+    )
+  }
+
+  if (isPlacingOrder) {
+    return (
+      <div className="admin">
+        <h1 style={{ textAlign: 'center' }}>Processing your order...</h1>
+      </div>
     )
   }
 
   return (
     <>
-      {isLoading ? (
-        <h1 style={{ textAlign: 'center' }}>Loading Cart items...</h1>
-      ) : cartItems.length ? (
+       {  cartItems.length ? (
         <main className={`cart-container ${dark ? 'dark' : ''}`}>
           <div className="cart-container">
             <h2 className="item-wish">Cart Items</h2>
@@ -125,39 +132,43 @@ export default function Cart() {
                       return
                     }
 
-                    const requestBody = {
-                      username: username,
-                      order_Id: order_Id,
-                    }
+                    setIsPlacingOrder(true)
+                    setTimeout(() => {
+                      const requestBody = {
+                        username: username,
+                        order_Id: order_Id,
+                      }
 
-                    fetch('http://localhost:8080/api/orders/place', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify(requestBody),
-                    })
-                      .then((response) => response.text()) // Parse the response as text since it's just a message
-                      .then((data) => {
-                        if (data === 'Order placed successfully!') {
-                          // Clear cart and navigate to the order confirmation page
-                          dispatch(removeallCartItem())
-                          navigate('/OrderConfirmation', {
-                            state: {
-                              username,
-                              cartItems,
-                              totalPrice,
-                              order_Id, // Ensure totalPrice is calculated properly
-                            },
-                          })
-                        } else {
-                          alert(data.message || 'Failed to place the order')
-                        }
+                      fetch('http://localhost:8080/api/orders/place', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestBody),
                       })
-                      .catch((error) => {
-                        console.error('Error placing order:', error)
-                        alert('An error occurred while placing the order.')
-                      })
+                        .then((response) => response.text()) // Parse response as plain text
+                        .then((data) => {
+                          if (data === 'Order placed successfully!') {
+                            dispatch(removeallCartItem())
+                            navigate('/OrderConfirmation', {
+                              state: {
+                                username,
+                                cartItems,
+                                totalPrice,
+                                order_Id,
+                              },
+                            })
+                          } else {
+                            alert(data.message || 'Failed to place the order')
+                          }
+                        })
+                        .catch((error) => {
+                          console.error('Error placing order:', error)
+                          alert('An error occurred while placing the order.')
+                        })
+                      setIsPlacingOrder(false)
+                      // Optional: Reset loading state here (e.g. setIsPlacingOrder(false))
+                    }, 3000)
                   }}
                   className="place"
                 >

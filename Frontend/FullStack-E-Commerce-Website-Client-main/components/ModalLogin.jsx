@@ -12,7 +12,8 @@ export default function ModalLogin({
   setUsername,
   setcheckuserlogin,
   setissign,
-  userlogin
+  userlogin,
+  setisadminlogin
 }) {
   const existingAdmin = JSON.parse(localStorage.getItem('Admin')) || {}
 
@@ -71,6 +72,8 @@ export default function ModalLogin({
           setIsAdmin(data.admin)
           if (data.admin) {
             setislog(false)
+            setisadminlogin(true)
+            localStorage.setItem('isadminlog', 'true');
             // localStorage.setItem('adminname', loginData.username) // Store admin username in localStorage
             localStorage.setItem('isAdmin', 'true') // Store 'true' as string in localStorage
             localStorage.setItem('username', loginData.username)

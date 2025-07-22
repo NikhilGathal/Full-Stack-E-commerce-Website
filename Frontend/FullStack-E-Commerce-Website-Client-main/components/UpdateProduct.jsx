@@ -11,12 +11,6 @@ const UpdateProduct = () => {
   const [, dark] = useOutletContext()
   const [product, setProduct] = useState(null)
 
-  // Get the product from the Redux store by id
-
-  // using localstorage
-  // const product = useSelector((state) => state.products.list.find(p => p.id === parseInt(id)))
-
-  // using database
 
   useEffect(() => {
     if (id) {
@@ -84,19 +78,7 @@ const UpdateProduct = () => {
       return // Don't proceed if rating is invalid
     }
 
-    // Dispatch the update action with the new values and the existing product id
-    // if (product) {
-    //   dispatch(updateProduct({
-    //     id: product.id,
-    //     title: newTitle,
-    //     price: newPrice,
-    //     category: newCategory,
-    //     description: newDescription,
-    //     image: newImage,
-    //     rating: { rate: newRating }
-    //   }))
-    //   navigate('/Home') // Redirect after update
-    // }
+    
     const updatedProduct = {
       id: product.id,
       title: newTitle,

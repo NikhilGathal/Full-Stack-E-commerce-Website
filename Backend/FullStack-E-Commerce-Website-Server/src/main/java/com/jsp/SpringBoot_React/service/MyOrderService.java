@@ -105,11 +105,12 @@ public class MyOrderService {
 	                order.getOrderId(),
 	                order.getOrderTotal(),
 	                order.getTotalQuantity(),
-	                order.getUser().getId(), // Get user ID
+	               	                order.getUser().getId(), // Get user ID
 	                order.getUser().getUsername(), // Get user username
 	                order.getUser().getEmail(), // Get user email
 	                order.getUser().getAddress(), // Get user address
 	                order.getUser().getPhone(), // Get user phone
+	                order.getRating(),
 	                productDTOs // Include list of products in the order
 	            );
 	        })
@@ -184,4 +185,11 @@ public class MyOrderService {
 	    public void deleteOrder(MyOrder order) {
 	        myOrderRepository.delete(order);
 	    }
+
+		public void updatemyorder(MyOrder order, int rating) {
+			
+			order.setRating(rating);
+			myOrderRepository.save(order);
+			
+		}
 }

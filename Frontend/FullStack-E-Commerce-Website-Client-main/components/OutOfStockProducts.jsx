@@ -1,68 +1,231 @@
-import React, { useEffect, useState } from "react";
-import { useOutletContext, Link } from "react-router-dom";
-import "./EmailsList.css";
+import React, { useEffect, useState } from 'react'
+import emailjs from 'emailjs-com'
+import { Link, useLocation, useOutletContext } from 'react-router-dom'
 
-const OutOfStockProductsDB = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [, dark] = useOutletContext();
+const OrderConfirmation = () => {
+      const [setissign, dark, isdark, issign, userlogin] = useOutletContext();
+  const [selected, setSelected] = useState(0);
 
-  useEffect(() => {
-    const fetchOutOfStockProducts = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/api/products");
-        if (!response.ok) throw new Error("Failed to fetch products");
+  const [count, setCount] = useState(0);
+ const [submitted, setSubmitted] = useState(false);
+  const location = useLocation()
+  const { username, cartItems, totalPrice ,order_Id} = location.state || {}
 
-        const allProducts = await response.json();
-        const outOfStock = allProducts.filter(p => p.rating?.count === 0);
-        setProducts(outOfStock);
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setTimeout(() => setLoading(false), 900); // simulate delay
-      }
-    };
+  // Fetch details (common for user and admin)
+  const fetchDetailsFromDB = async (username) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/users/${username}`
+      )
+      if (response.ok) {
+        const userDetails = await response.json()
+        return userDetails
+      } else {
+        console.error('Failed to fetch details for:', username)
+        return null
+      }
+    } catch (error) {
+      console.error('Error fetching details:', error)
+      return null
+    }
+  }
 
-    fetchOutOfStockProducts();
-  }, []);
+  const sendOrderEmail = async () => {
+    if (!username || !cartItems) {
+      console.error('Invalid order data')
+      return
+    }
 
-  return (
-    <div className={`emails-list-container ${dark ? "dark" : ""}`}>
-      {loading ? (
-        <div className="admin"><h1>Loading Out of Stock Products...</h1></div>
-      ) : products.length === 0 ? (
-        <div className="admin"><h1>No Out of Stock Products Found</h1></div>
-      ) : (
-        <>
-          <h2 className="emails-list-heading">Out of Stock Products (DB)</h2>
-          <div className="emails-table-container">
-            <table className="emails-table">
-              <thead>
-                <tr className="emails-table-header">
-                  <th>Sr No.</th>
-                  <th>Product ID</th>
-                  <th>Title</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product, index) => (
-                  <tr key={product.id} className="emails-table-row">
-                    <td>{index + 1}</td>
-                    <td>
-                      <Link to={`/${product.id}`} className="heading">{product.id}</Link>
-                    </td>
-                    <td>
-                      <Link to={`/${product.id}`} className="heading">{product.title}</Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
-    </div>
-  );
+    const userDetails = await fetchDetailsFromDB(username)
+    const adminUsername = localStorage.getItem('adminname')
+    const adminDetails = await fetchDetailsFromDB(adminUsername)
+
+    if (userDetails && adminDetails) {
+      const { email, phone, address } = userDetails
+      const date = new Date();
+      const formattedDate = date.toLocaleString('en-IN', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: 'numeric', 
+        minute: 'numeric', 
+        second: 'numeric',
+        hour12: true
+      });
+      // const order_id = `OD${Date.now()}`
+
+      const products = cartItems.map((item) => ({
+        product_name: item.title,
+        quantity: item.quantity,
+        product_price: parseFloat(item.price).toFixed(2),
+        total_price: (parseFloat(item.price) * item.quantity).toFixed(2),
+      }))
+
+      const productDetailsString = products
+        .map(
+          (item) =>
+            `Product: ${item.product_name}\nQty: ${item.quantity}\nPrice: $${item.product_price}\nTotal Amount: $${item.total_price}\n\n`
+        )
+        .join('')
+
+        const completeTotal = products
+        .reduce((sum, item) => sum + parseFloat(item.total_price), 0)
+        .toFixed(2);
+
+      const emailParams = {
+        username,
+        useremail: email,
+        user_phone: phone,
+        user_address: address,
+        formattedDate,
+        order_Id,
+        productDetails: productDetailsString,
+        totalOrderPrice: parseFloat(totalPrice || 0).toFixed(2),
+        completeTotal,
+      }
+
+      // Send email to user
+      emailjs
+        .send(
+          'service_xdyg5f6', // Service ID
+          'template_9w8s44b', // Template ID
+          emailParams,
+          'e1rMsTvTE-ncRNQc2' // Public key
+        )
+        .then((response) => {
+          console.log('Email sent to user successfully', response)
+        })
+        .catch((error) => {
+          console.error('Error sending email to user', error)
+        })
+
+      // Send email to admin
+      const adminEmailParams = {
+        ...emailParams,
+        admin_email: adminDetails.email,
+        subject: `New Order Received: ${order_Id}`,
+        Name: 'Shopee',
+      }
+
+      emailjs
+        .send(
+          'service_xdyg5f6', // Service ID
+          'template_6x3qvh3', // Template ID
+          adminEmailParams,
+          'e1rMsTvTE-ncRNQc2' // Public key
+        )
+        .then((response) => {
+          console.log('Email sent to admin successfully', response)
+        })
+        .catch((error) => {
+          console.error('Error sending email to admin', error)
+        })
+    } else {
+      console.error('User or admin details not found')
+    }
+  }
+  useEffect(() => {
+  const hasSentEmail = localStorage.getItem(`emailSentForOrder_${order_Id}`);
+
+  if (!hasSentEmail && username && cartItems) {
+     sendOrderEmail();
+    localStorage.setItem(`emailSentForOrder_${order_Id}`, "true"); // ✅ Set flag
+  }
+}, []);
+useEffect(() => {
+  if (order_Id) {
+    const savedRating = localStorage.getItem(`rating_${order_Id}`);
+    if (savedRating) {
+      setCount(Number(savedRating));
+       setSelected(savedRating);
+      setSubmitted(true);
+    }
+  }
+}, [order_Id]);
+
+const handleStarClick = (val) => {
+  if (!submitted) {
+    setSelected(val);
+  }
 };
 
-export default OutOfStockProductsDB;
+
+const handleSubmitRating = async (val) => {
+  setCount(selected);
+  setSubmitted(true);
+
+  // Store rating locally so it stays after refresh
+  localStorage.setItem(`rating_${order_Id}`, val);
+
+  if (order_Id) {
+    try {
+      await fetch(`http://localhost:8080/api/orders/rating/${order_Id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rating: val }),
+      });
+      console.log("Rating updated successfully");
+    } catch (err) {
+      console.error("Failed to update rating", err);
+    }
+  }
+};
+  return (
+    <>
+    <div className="order-confirm">
+    <h1>Order Confirmation</h1>
+    <p>Thank you for your order, {username}!</p>
+    <p>We have sent the order details to your email.</p>
+   <div style={{ marginTop: '30px', textAlign: 'center' }}>
+  {!submitted ? (
+    <>
+      <h2>Rate your experience</h2>
+      <div style={{ marginTop: '10px' }}>
+        {[1, 2, 3, 4, 5].map((val) => (
+          <span
+            key={val}
+            onClick={() => handleStarClick(val)}
+            style={{
+            color: (submitted ? count : selected) >= val
+  ? (dark ? 'gold' : 'rgba(158, 49, 49, 1)')
+  : 'grey',
+              fontSize: '40px',
+              cursor: 'pointer',
+            }}
+          >
+            ☆
+          </span>
+        ))}
+      </div>
+
+      <button
+          onClick={() => handleSubmitRating(selected)}
+        style={{
+          marginTop: '15px',
+          padding: '10px 20px',
+          fontSize: '16px',
+          cursor: selected > 0 ? 'pointer' : 'not-allowed',
+          borderRadius: '5px',
+marginBottom : '20px',
+border: '2px solid black'
+        }}
+        disabled={selected === 0}
+      > Submit Rating
+</button>
+ </> ) : (
+<p style={{ fontSize: '24px', marginTop: '20px' }}>
+✅ Thanks for rating us {count} star{count > 1 ? 's' : ''}!
+</p>
+)}
+</div>
+  </div>
+  <div className='ord'>
+  <Link to="/Home">
+          <button>Continue shopping</button>
+        </Link>
+  </div>
+</>
+  )
+}
+export default OrderConfirmation

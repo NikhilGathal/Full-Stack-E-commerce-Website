@@ -30,18 +30,6 @@ public class CartController {
 	@PostMapping("/add")
 	public ResponseEntity<String> addToCart(@RequestParam Long userId, @RequestParam Long productId,
 			@RequestParam int quantity) {
-		
-		 User user = userRepository.findById(userId).orElseThrow();
-		    Product product = productRepository.findById(productId).orElseThrow();
-		    
-
-		    int availableStock = product.getRating().getCount();
-
-		    if (availableStock < quantity) {
-		        throw new RuntimeException("Product is out of stock or insufficient stock available.");
-		    }
-		
-		
 		System.out.println(userId + "  " + productId + " " + quantity);
 		cartService.addToCart(userId, productId, quantity);
 		return ResponseEntity.ok("Product added to cart");

@@ -39,6 +39,8 @@ public class MyOrder {
 	private Double orderTotal;
 	
 	private Integer totalQuantity;
+	
+	 private Integer rating = 0;
 
 
 	 @JsonBackReference

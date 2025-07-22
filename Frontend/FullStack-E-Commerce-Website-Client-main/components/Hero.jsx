@@ -32,7 +32,7 @@ const ImageList = [
   },
 ]
 
-const Hero = () => {
+const Hero = ({id}) => {
   const [, dark] = useOutletContext()
   var settings = {
     dots: false,
@@ -48,7 +48,7 @@ const Hero = () => {
   }
 
   return (
-    <div className={`hero-container ${dark ? 'dark' : ''}`}>
+    <div id={id} className={`hero-container ${dark ? 'dark' : ''}`}>
       {/* background pattern */}
    
       {/* hero section */}

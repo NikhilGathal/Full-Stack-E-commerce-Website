@@ -3,6 +3,7 @@ package com.jsp.SpringBoot_React.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.jsp.SpringBoot_React.entity.CartItem;
 import com.jsp.SpringBoot_React.entity.Product;
 import com.jsp.SpringBoot_React.entity.User;
@@ -10,7 +11,8 @@ import com.jsp.SpringBoot_React.repo.CartItemRepository;
 import com.jsp.SpringBoot_React.repo.ProductRepository;
 import com.jsp.SpringBoot_React.repo.UserRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;  // ✅ Correct
+import org.springframework.transaction.annotation.Isolation;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,12 +29,20 @@ public class CartService {
 	@Autowired
 	private CartItemRepository cartItemRepository;
 
-	@Transactional
+	@Transactional(timeout = 3, isolation = Isolation.SERIALIZABLE)
 	public void addToCart(Long userId, Long productId, int quantity) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
+		
+		
+		 int availableStock = product.getRating().getCount();
+
+		    if (availableStock < quantity) {
+		        throw new RuntimeException("Product is out of stock or insufficient stock available.");
+		    }
+
 
 		// Check if product is already in the cart
 		Optional<CartItem> existingCartItem = user.getCartItems().stream()

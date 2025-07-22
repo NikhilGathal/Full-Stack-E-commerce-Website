@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -134,8 +135,23 @@ public class MyOrderController {
 	    }
 	}
 
-
+	@PutMapping("/rating/{orderId}")
+	public ResponseEntity<String> updateOrderRating(@PathVariable String orderId, @RequestBody Map<String, Integer> payload) {
 	
+	 try {
+	        Optional<MyOrder> optionalOrder = myOrderService.findOrderByOrder_Id(orderId);
+	        if (!optionalOrder.isPresent()) {
+	            return new ResponseEntity<>("Order not found", HttpStatus.NOT_FOUND);
+	        }
+	        MyOrder order = optionalOrder.get();
+	        int rating = payload.get("rating");
+	        myOrderService.updatemyorder(order, rating);
+	        return ResponseEntity.ok("Rating updated successfully");
+	      
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<>("Failed to update order", HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 	
-
+}
 }

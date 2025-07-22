@@ -29,24 +29,10 @@ export default function Header({
   checkuserlogin,
   userlogin
 }) {
-  // console.log('from header ' + userlogin);
-  // const isAdmin = localStorage.getItem('isAdmin')
+  
   const location = useLocation()
   const [dbname, setDbname] = useState('')
-  // console.log(dbname);
-
-  // if (localStorage.getItem('isAdmin') === 'true') {
-  //   // console.log( localStorage.getItem('adminname') === dbname);
-  //   fetch('http://localhost:8080/api/users/admin-username')
-  //     .then((response) => response.text()) // Parse the JSON response
-  //     .then((data) => {
-  //       setDbname(data)
-  //       // console.log(data) // Set the admin username in state
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching admin username:', error)
-  //     })
-  // }
+  
 
   const [isAdmin1, setIsAdmin1] = useState(
     localStorage.getItem('isAdmin') === 'true'
@@ -65,44 +51,33 @@ export default function Header({
     }
   }, [isAdmin1])
 
-  // console.log(isAdmin);
-  const name = localStorage.getItem('adminname')
-  // console.log(name+ ' ' + dbname);
 
-  // console.log(name === dbname);
+  const name = localStorage.getItem('adminname')
+
 
   const [signname, setsignname] = useState(false)
-  // console.log(signname);
+ 
 
   const [islog, setislog] = useState(false)
-  // console.log(islog);
+ 
 
   const [menuOpen, setMenuOpen] = useState(false)
 
   const navigate = useNavigate()
-  // console.log(isAdmin);
+ 
   const existingAdmin = JSON.parse(localStorage.getItem('Admin')) || {}
   const adminUsername = existingAdmin.username // Get the username from existingAdmin
 
   const dispatch = useDispatch()
 
+const [isadminlog , setisadminlogin] = useState(() => {
+  return localStorage.getItem('isadminlog') === 'true'; // returns false if key is missing or not "true"
+});
   const [username, setusername] = useState(() => {
     return localStorage.getItem('username') || ''
   })
 
-  useEffect(() => {
-    if (username) {
-      // setIsAdmin(true)
-      // Fetch and load the user's cart and wishlist from localStorage when username changes (i.e., user logs in)
-      const storedCart =
-        JSON.parse(localStorage.getItem(`${username}cart`)) || []
-      dispatch(loadCartItemsFromLocal(storedCart))
 
-      const storedWish =
-        JSON.parse(localStorage.getItem(`${username}wish`)) || []
-      dispatch(loadWishItem(storedWish))
-    }
-  }, [username, dispatch])
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username')
@@ -245,21 +220,7 @@ export default function Header({
     }
   }
 
-  // const scrollToSection = (id) => {
-  //   const section = document.getElementById(id);
-  //   let yOffset;
-  
-  //   if (section) {
-  //     if (section.id === "subscribe") {  // Use a string for ID comparison
-  //       yOffset = -200;
-  //     } else {
-  //       yOffset = -100;
-  //     }
-  //     // Adjust offset based on header height
-  //     const y = section.getBoundingClientRect().top + window.scrollY + yOffset;
-  //     window.scrollTo({ top: y, behavior: "smooth" });
-  //   }
-  // };
+
   useEffect(() => {
     localStorage.setItem("userlogin", JSON.stringify(userlogin));
   }, [userlogin]);
@@ -307,7 +268,6 @@ export default function Header({
               window.scrollTo({ top: 0, behavior: 'smooth' })
               dispatch(fetchProductdata())
               // dispatch(updateAllProducts(statedata))
-              //  console.log('clicked');
             }}
             className="H"
           >
@@ -315,14 +275,7 @@ export default function Header({
             Shopee{' '}
           </h1>{' '}
         </Link>
-        {/* <i
-          onClick={() => {
-            localStorage.setItem('isdarkmode', !dark)
-            isdark(!dark)
-          }}
-          title={`${dark ? 'light mode' : 'dark mode'}`}
-          className={`mode fa-solid fa-2xl fa-${dark ? 'sun ' : 'moon '}  `}
-        ></i> */}
+       
 
         <img
           onClick={() => {
@@ -342,33 +295,42 @@ export default function Header({
             ? `Welcome ${localStorage.getItem('adminname')}`
             : ''}
         </h3>
-        <div className="icon-contain">
-          <Link className="cart-icon" to="/cart">
-            <img
-              className={`c H ${dark ? 'dark' : ''} `}
-              title="Cart"
-              src={CartIcon}
-              alt="cart-icon"
-            />
+      
 
-            <div className="cart-items-count">
-              {cartItems.reduce(
-                (accumulator, currentItem) =>
-                  accumulator + currentItem.quantity,
-                0
-              )}
-            </div>
-          </Link>
-          <Link className="cart-icon" to="/wish">
-            <img
-              title="WishList"
-              className="c heart H"
-              src={wishIcon}
-              alt="wish-icon"
-            />
-            <div className="cart-items-count">{wish.length}</div>
-          </Link>
+{
+ !isadminlog && (
+    <div className="icon-contain">
+      <Link className="cart-icon" to="/cart">
+        <img
+          className={`c H ${dark ? 'dark' : ''}`}
+          title="Cart"
+          src={CartIcon}
+          alt="cart-icon"
+        />
+        <div className="cart-items-count">
+          {cartItems.reduce(
+            (accumulator, currentItem) => accumulator + currentItem.quantity,
+            0
+          )}
         </div>
+      </Link>
+
+      <Link className="cart-icon" to="/wish">
+        <img
+          title="WishList"
+          className="c heart H"
+          src={wishIcon}
+          alt="wish-icon"
+        />
+        <div className="cart-items-count">
+          {wish.reduce((acc, curr) => acc + curr.quantity, 0)}
+        </div>
+      </Link>
+    </div>
+  )
+}
+
+
 
         <div onClick={(e) => e.stopPropagation()} className="ham">
           <span onClick={toggleMenu} className="close-icon">
@@ -378,6 +340,9 @@ export default function Header({
              <div className="H sections-container">
             <h3 className="sett">Sections</h3>
             <div className="suggestion-box-home">
+                <p onClick={() => handleNavigation('hero')} className="H">
+                Home
+              </p>
               <p onClick={() => handleNavigation('category')} className="H">
                 Category
               </p>
@@ -390,26 +355,13 @@ export default function Header({
               <p onClick={() => handleNavigation('testimonials')} className="H">
                 Testimonials
               </p>
+                   <p onClick={() => handleNavigation('foot')} className="H">
+                Footer
+              </p>
             </div>
           </div>
 
-          {/* <div className="H sections-container">
-            <h3 >Sections</h3>
-            <div className="suggestion-box-home">
-              <p onClick={() => scrollToSection('category')} className="H">
-                Category
-              </p>
-              <p onClick={() => scrollToSection('top-products')} className="H">
-                TopProducts
-              </p>
-              <p onClick={() => scrollToSection('subscribe')} className="H">
-                Subscription
-              </p>
-              <p onClick={() => scrollToSection('testimonials')} className="H">
-                Testimonials
-              </p>
-            </div>
-          </div> */}
+        
 
           <h3
             className="H"
@@ -494,13 +446,7 @@ export default function Header({
           !userlogin &&
          (  <div className="H login-container">
           <h3
-           //  style={{
-           //    display:
-           //      localStorage.getItem('username') ||
-           //      localStorage.getItem('isAdmin') === 'true'
-           //        ? 'none'
-           //        : 'block',
-           //  }}
+          
           >
             Login
             <div className="suggestion-box-log">
@@ -536,17 +482,19 @@ export default function Header({
             setcheckuserlogin={setcheckuserlogin}
             setissign={setissign}
             userlogin={userlogin}
+            setisadminlogin={setisadminlogin}
           />
           <h3
             className="H"
             onClick={() => {
+
+              if(isadminlog)
+              {
+                setisadminlogin(false)
+                 localStorage.removeItem('isadminlog'); 
+              }
+
               localStorage.removeItem('username')
-              const storedCart =
-                JSON.parse(localStorage.getItem('cartItems')) || []
-              const storedwish =
-                JSON.parse(localStorage.getItem('wishItems')) || []
-              dispatch(loadCartItemsFromLocal(storedCart))
-              dispatch(loadWishItem(storedwish))
               setuserlogin(false)
               localStorage.setItem("userlogin", JSON.stringify(false));
               setusername('')
