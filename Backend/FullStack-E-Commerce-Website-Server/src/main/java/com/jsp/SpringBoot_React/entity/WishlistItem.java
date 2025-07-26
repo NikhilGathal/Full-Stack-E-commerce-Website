@@ -18,6 +18,8 @@ public class WishlistItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	
 
 	// Store complete product details in WishlistItem (Unidirectional relation)
 	@ManyToOne(fetch = FetchType.LAZY)

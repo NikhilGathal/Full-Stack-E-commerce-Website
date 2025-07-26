@@ -32,7 +32,7 @@ const ImageList = [
   },
 ]
 
-const Hero = ({id}) => {
+const Hero = ({ id }) => {
   const [, dark] = useOutletContext()
   var settings = {
     dots: false,
@@ -50,10 +50,10 @@ const Hero = ({id}) => {
   return (
     <div id={id} className={`hero-container ${dark ? 'dark' : ''}`}>
       {/* background pattern */}
-   
+
       {/* hero section */}
       <div className="container">
-      <div className="background-pattern"></div>
+        <div className="background-pattern"></div>
         <Slider {...settings}>
           {ImageList.map((data) => (
             <div key={data.id}>
@@ -75,9 +75,7 @@ const Hero = ({id}) => {
               </div>
             </div>
           ))}
-         
         </Slider>
-     
       </div>
     </div>
   )

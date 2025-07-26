@@ -4,7 +4,6 @@ import SelectMenu from '../components/SelectMenu'
 import { useDispatch, useSelector } from 'react-redux'
 import Product from '../components/Product'
 import {
-
   getAllProducts,
   getProductError,
   getProductLoadingState,
@@ -15,40 +14,30 @@ import ProductShimmer from '../components/ProductShimmer'
 import Footer from '../components/Footer'
 import Carousel from '../components/Carousel'
 import ImageContainer from '../components/ImageContainer'
-
-
 export default function Home() {
   const [query, setquery] = useState('')
   const [query1, setquery1] = useState('')
   const productsList = useSelector((state) => state.products.list)
-  const [filteredProducts, setFilteredProducts] = useState([]);
-
-
+  const [filteredProducts, setFilteredProducts] = useState([])
   const [setissign, dark, isdark, issign, userlogin] = useOutletContext()
-
-
   const dispatch = useDispatch()
-
-
-
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (query.length > 2) {
         // Filter the products based on the search query
         const filtered = productsList.filter((product) =>
           product.title.toLowerCase().includes(query.toLowerCase())
-        );
-        setFilteredProducts(filtered);
+        )
+        setFilteredProducts(filtered)
       } else {
         // If query is cleared or too short, display all products
-        setFilteredProducts(productsList);
+        setFilteredProducts(productsList)
       }
-    }, 300); // 300ms debounce delay
-  
+    }, 300) // 300ms debounce delay
+
     // Cleanup the timeout on query change
-    return () => clearTimeout(delayDebounceFn);
-  }, [query, productsList]);
-  
+    return () => clearTimeout(delayDebounceFn)
+  }, [query, productsList])
 
   const isLoading = useSelector(getProductLoadingState)
   // const isLoading = 1
@@ -56,15 +45,12 @@ export default function Home() {
   return (
     <>
       <main className={` ${dark ? 'dark' : ''}`}>
-        
-      <Carousel />
+        <Carousel />
         <ImageContainer />
         <div className="search-filter-container">
           <SearchBar query={query} setquery={setquery} />
           <SelectMenu setquery1={setquery1} setquery={setquery} />
         </div>
-
-       
 
         {/* Render loading message */}
         {/* {isLoading && <h1 className='home-error'>Loading...</h1>} */}

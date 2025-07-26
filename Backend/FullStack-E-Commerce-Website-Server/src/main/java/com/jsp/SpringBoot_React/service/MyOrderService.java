@@ -9,7 +9,7 @@ import com.jsp.SpringBoot_React.repo.CartItemRepository;
 import com.jsp.SpringBoot_React.repo.MyOrderRepository;
 import com.jsp.SpringBoot_React.repo.UserRepository;
 
-import jakarta.transaction.Transactional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,8 +37,12 @@ import com.jsp.SpringBoot_React.repo.MyOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;  // ✅ Correct
+import org.springframework.transaction.annotation.Isolation;
 import java.util.List;
 
+  // ✅ Correct
+import org.springframework.transaction.annotation.Isolation;
 @Service
 public class MyOrderService {
 
@@ -121,7 +125,7 @@ public class MyOrderService {
 
 
 	
-	
+	@Transactional(timeout = 3, isolation = Isolation.SERIALIZABLE)
 	public MyOrder saveOrderForUser(String username, List<CartItem> cartItems ,String orderId) {
 
 		// Fetch the user from the database using the username

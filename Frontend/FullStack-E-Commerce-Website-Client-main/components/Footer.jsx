@@ -2,15 +2,19 @@ import React from 'react'
 import './footer.css' // You will style it in this CSS file
 // import shop from '../assets/Sho.jpg'
 import { Link } from 'react-router-dom'
-const Footer = ({ dark ,id }) => {
+const Footer = ({ dark, id }) => {
   return (
-    <footer id={ id } data-aos="zoom-in"   className={`footer ${dark ? 'dark' : ''}`}>
-      <div   className="footer-left">
+    <footer
+      id={id}
+      data-aos="zoom-in"
+      className={`footer ${dark ? 'dark' : ''}`}
+    >
+      <div className="footer-left">
         <div className="footer-brand">
           {/* <img src={shop} alt="Logo" className="footer-logo" /> */}
           <a href="#">
             <svg
-             className="icon"
+              className="icon"
               stroke="currentColor"
               fill="none"
               strokeWidth="2"

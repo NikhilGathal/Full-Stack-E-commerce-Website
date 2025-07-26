@@ -24,7 +24,8 @@ public class WishlistItemController {
     // Add product to wishlist
     @PostMapping("/add")
     public ResponseEntity<String> addToWishlist(@RequestParam Long userId, @RequestParam Long productId) {
-        try {
+      
+    	try {
             wishlistItemService.addToWishlist(userId, productId);
             return ResponseEntity.ok("Product added to wishlist");
         } catch (RuntimeException e) {

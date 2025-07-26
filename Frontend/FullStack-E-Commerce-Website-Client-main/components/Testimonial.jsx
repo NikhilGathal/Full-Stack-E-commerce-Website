@@ -32,7 +32,7 @@ const TestimonialData = [
     img: pro4,
   },
 ]
-const Testimonials = ({id}) => {
+const Testimonials = ({ id }) => {
   const [, dark] = useOutletContext()
 
   var settings = {

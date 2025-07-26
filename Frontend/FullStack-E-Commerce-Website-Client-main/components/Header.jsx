@@ -27,17 +27,16 @@ export default function Header({
   setUsername,
   setcheckuserlogin,
   checkuserlogin,
-  userlogin
+  userlogin,
 }) {
+  console.log('rendered');
   
   const location = useLocation()
   const [dbname, setDbname] = useState('')
-  
 
   const [isAdmin1, setIsAdmin1] = useState(
     localStorage.getItem('isAdmin') === 'true'
   )
-
   useEffect(() => {
     if (isAdmin1) {
       fetch('http://localhost:8080/api/users/admin-username')
@@ -50,34 +49,23 @@ export default function Header({
         })
     }
   }, [isAdmin1])
-
-
   const name = localStorage.getItem('adminname')
-
-
   const [signname, setsignname] = useState(false)
- 
-
   const [islog, setislog] = useState(false)
- 
-
   const [menuOpen, setMenuOpen] = useState(false)
-
   const navigate = useNavigate()
- 
+
   const existingAdmin = JSON.parse(localStorage.getItem('Admin')) || {}
   const adminUsername = existingAdmin.username // Get the username from existingAdmin
 
   const dispatch = useDispatch()
 
-const [isadminlog , setisadminlogin] = useState(() => {
-  return localStorage.getItem('isadminlog') === 'true'; // returns false if key is missing or not "true"
-});
+  const [isadminlog, setisadminlogin] = useState(() => {
+    return localStorage.getItem('isadminlog') === 'true' // returns false if key is missing or not "true"
+  })
   const [username, setusername] = useState(() => {
     return localStorage.getItem('username') || ''
   })
-
-
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username')
@@ -146,6 +134,8 @@ const [isadminlog , setisadminlogin] = useState(() => {
   const cartItems = useSelector((state) => state.cartItems.list)
   // console.log(cartItems);
   const wish = useSelector((state) => state.wishList.list)
+  console.log(wish)
+
   // console.log(wish);
 
   const toggleMenu = (e) => {
@@ -220,10 +210,9 @@ const [isadminlog , setisadminlogin] = useState(() => {
     }
   }
 
-
   useEffect(() => {
-    localStorage.setItem("userlogin", JSON.stringify(userlogin));
-  }, [userlogin]);
+    localStorage.setItem('userlogin', JSON.stringify(userlogin))
+  }, [userlogin])
 
   const handleNavigation = (sectionId) => {
     if (location.pathname !== '/') {
@@ -275,7 +264,6 @@ const [isadminlog , setisadminlogin] = useState(() => {
             Shopee{' '}
           </h1>{' '}
         </Link>
-       
 
         <img
           onClick={() => {
@@ -295,52 +283,46 @@ const [isadminlog , setisadminlogin] = useState(() => {
             ? `Welcome ${localStorage.getItem('adminname')}`
             : ''}
         </h3>
-      
 
-{
- !isadminlog && (
-    <div className="icon-contain">
-      <Link className="cart-icon" to="/cart">
-        <img
-          className={`c H ${dark ? 'dark' : ''}`}
-          title="Cart"
-          src={CartIcon}
-          alt="cart-icon"
-        />
-        <div className="cart-items-count">
-          {cartItems.reduce(
-            (accumulator, currentItem) => accumulator + currentItem.quantity,
-            0
-          )}
-        </div>
-      </Link>
+        {!isadminlog && (
+          <div className="icon-contain">
+            <Link className="cart-icon" to="/cart">
+              <img
+                className={`c H ${dark ? 'dark' : ''}`}
+                title="Cart"
+                src={CartIcon}
+                alt="cart-icon"
+              />
+              <div className="cart-items-count">
+                {cartItems.reduce(
+                  (accumulator, currentItem) =>
+                    accumulator + currentItem.quantity,
+                  0
+                )}
+              </div>
+            </Link>
 
-      <Link className="cart-icon" to="/wish">
-        <img
-          title="WishList"
-          className="c heart H"
-          src={wishIcon}
-          alt="wish-icon"
-        />
-        <div className="cart-items-count">
-          {wish.reduce((acc, curr) => acc + curr.quantity, 0)}
-        </div>
-      </Link>
-    </div>
-  )
-}
-
-
+            <Link className="cart-icon" to="/wish">
+              <img
+                title="WishList"
+                className="c heart H"
+                src={wishIcon}
+                alt="wish-icon"
+              />
+              <div className="cart-items-count">{wish.length}</div>
+            </Link>
+          </div>
+        )}
 
         <div onClick={(e) => e.stopPropagation()} className="ham">
           <span onClick={toggleMenu} className="close-icon">
             &times;
           </span>
 
-             <div className="H sections-container">
+          <div className="H sections-container">
             <h3 className="sett">Sections</h3>
             <div className="suggestion-box-home">
-                <p onClick={() => handleNavigation('hero')} className="H">
+              <p onClick={() => handleNavigation('hero')} className="H">
                 Home
               </p>
               <p onClick={() => handleNavigation('category')} className="H">
@@ -355,13 +337,11 @@ const [isadminlog , setisadminlogin] = useState(() => {
               <p onClick={() => handleNavigation('testimonials')} className="H">
                 Testimonials
               </p>
-                   <p onClick={() => handleNavigation('foot')} className="H">
+              <p onClick={() => handleNavigation('foot')} className="H">
                 Footer
               </p>
             </div>
           </div>
-
-        
 
           <h3
             className="H"
@@ -431,9 +411,9 @@ const [isadminlog , setisadminlogin] = useState(() => {
                     <Link to="/Emailslist">
                       <p>Subscription</p>
                     </Link>
-                     <Link to="/OutOfStockProducts">
-                        <p>Out of Stock</p>
-                      </Link>
+                    <Link to="/OutOfStockProducts">
+                      <p>Out of Stock</p>
+                    </Link>
                     <Link to="/FeedbacksList">
                       <p>Feedbacks</p>
                     </Link>
@@ -442,36 +422,33 @@ const [isadminlog , setisadminlogin] = useState(() => {
               </>
             )}
           </div>
-         {
-          !userlogin &&
-         (  <div className="H login-container">
-          <h3
-          
-          >
-            Login
-            <div className="suggestion-box-log">
-              <p
-                onClick={(e) => {
-                  setislog(true)
-                  toggleMenu(e)
-                  // console.log('hi')
-                }}
-              >
-                Admin
-              </p>
-              <p
-                onClick={(e) => {
-                  setislog(true)
-                  toggleMenu(e)
-                  // console.log('hi')
-                }}
-              >
-                User
-              </p>
+          {!userlogin && (
+            <div className="H login-container">
+              <h3>
+                Login
+                <div className="suggestion-box-log">
+                  <p
+                    onClick={(e) => {
+                      setislog(true)
+                      toggleMenu(e)
+                      // console.log('hi')
+                    }}
+                  >
+                    Admin
+                  </p>
+                  <p
+                    onClick={(e) => {
+                      setislog(true)
+                      toggleMenu(e)
+                      // console.log('hi')
+                    }}
+                  >
+                    User
+                  </p>
+                </div>
+              </h3>
             </div>
-          </h3>
-        </div>)
-         }
+          )}
           <ModalLogin
             islog={islog}
             setislog={setislog}
@@ -487,16 +464,14 @@ const [isadminlog , setisadminlogin] = useState(() => {
           <h3
             className="H"
             onClick={() => {
-
-              if(isadminlog)
-              {
+              if (isadminlog) {
                 setisadminlogin(false)
-                 localStorage.removeItem('isadminlog'); 
+                localStorage.removeItem('isadminlog')
               }
 
               localStorage.removeItem('username')
               setuserlogin(false)
-              localStorage.setItem("userlogin", JSON.stringify(false));
+              localStorage.setItem('userlogin', JSON.stringify(false))
               setusername('')
               setIsAdmin(false)
               setsignname(false)

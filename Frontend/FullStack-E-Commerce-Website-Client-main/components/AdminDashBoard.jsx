@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import './OrderList.css'
-import { useOutletContext } from 'react-router-dom'
+import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 
 function AdminDashBoard() {
   const [setissign, dark, isdark, issign, userlogin] = useOutletContext()
   const [orders, setOrders] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate()
+  const isAdminLog = localStorage.getItem('isadminlog') === 'true'
+  useEffect(() => {
+    if (!isAdminLog) {
+      navigate('/')
+    }
+  }, [isAdminLog])
+
+  if (!isAdminLog) {
+    return null // ✅ Prevents rendering if admin is not logged in
+  }
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -15,8 +26,7 @@ function AdminDashBoard() {
         )
         if (response.ok) {
           const data = await response.json()
-     
-          
+
           setOrders(data)
         } else {
           console.error('Failed to fetch orders:', response.statusText)
@@ -59,11 +69,9 @@ function AdminDashBoard() {
       products,
       order_Id,
       orderDate,
-    rating  // ✅ include rating from backend
+      rating, // ✅ include rating from backend
     } = order
 
-   
-    
     if (!acc[id]) {
       acc[id] = {
         username,
@@ -74,7 +82,7 @@ function AdminDashBoard() {
         totalPrice: 0,
         order_Id,
         orderDate,
-         rating  // ✅ store it
+        rating, // ✅ store it
       }
     }
     products.forEach((item) => {
@@ -89,8 +97,6 @@ function AdminDashBoard() {
     })
     return acc
   }, {})
-  
-  
 
   return (
     <div className={`order-container ${dark ? 'dark' : ''}`}>
@@ -125,7 +131,7 @@ function AdminDashBoard() {
                   totalPrice,
                   order_Id,
                   orderDate,
-                  rating
+                  rating,
                 } = groupedOrders[orderId]
 
                 if (!items || items.length === 0) {
@@ -150,10 +156,15 @@ function AdminDashBoard() {
                         <p>No user details available</p>
                       )}
                     </div>
-                    <div className="grid-item orders-column">
+                    <div className="grid-item orders-column ord">
                       {items.map((item, index) => (
                         <div className="ord" key={index}>
-                          <span className="amp">Product: {item.title}</span>
+                          <Link to={`/${item.id}`}>
+                            <span className="amp userord">
+                              Product: {item.title}
+                            </span>
+                          </Link>
+
                           <span className="amp">
                             Product ID: {item.productId}
                           </span>
@@ -168,10 +179,14 @@ function AdminDashBoard() {
                       ${totalPrice.toFixed(2)}
                     </div>
                     <div className="amp grid-item rating-column">
-                       {' '}
                       {rating > 0 ? (
-                        <span style={{ color: dark ? "gold" : 'rgba(158, 49, 49, 1)' , fontSize: '24px' }}>
-                                {'★'.repeat(rating)}
+                        <span
+                          style={{
+                            color: dark ? 'gold' : '#ff6340',
+                            
+                          }}
+                        >
+                          {'★'.repeat(rating)}
                           {'☆'.repeat(5 - rating)}   {' '}
                         </span>
                       ) : (

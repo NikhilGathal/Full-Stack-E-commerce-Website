@@ -31,29 +31,29 @@ public class WishlistItemService {
 	
 	@Transactional
 	public void addToWishlist(Long userId, Long productId) {
-		// Fetch the user and product by their IDs
-		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
-		Product product = productRepository.findById(productId)
-				.orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
+	    User user = userRepository.findById(userId)
+	        .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 
-		// Check if product is already in the wishlist
-		Optional<WishlistItem> existingWishlistItem = wishlistItemRepository.findAll().stream()
-				.filter(wishlistItem -> wishlistItem.getProduct().getId().equals(productId)
-						&& wishlistItem.getProduct().getId().equals(productId))
-				.findFirst();
+	    Product product = productRepository.findById(productId)
+	        .orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
 
-		if (existingWishlistItem.isPresent()) {
-			throw new RuntimeException("Product already in wishlist.");
-		} else {
-			// Create a new wishlist item and save it
-			WishlistItem newWishlistItem = new WishlistItem();
-			newWishlistItem.setProduct(product);
-			wishlistItemRepository.save(newWishlistItem);
-			 user.getWishlistItems().add(newWishlistItem);
-	            userRepository.save(user);
-		}
+	    // Check if product is already in the wishlist of that user
+	    boolean alreadyExists = user.getWishlistItems().stream()
+	        .anyMatch(wishlistItem -> wishlistItem.getProduct().getId().equals(productId));
+
+	    if (alreadyExists) {
+	        throw new RuntimeException("Product already in wishlist.");
+	    }
+
+	    // Add to wishlist
+	    WishlistItem newWishlistItem = new WishlistItem();
+	    newWishlistItem.setProduct(product);
+	    wishlistItemRepository.save(newWishlistItem);
+
+	    user.getWishlistItems().add(newWishlistItem);
+	    userRepository.save(user);
 	}
+
 	
 	
 @Transactional

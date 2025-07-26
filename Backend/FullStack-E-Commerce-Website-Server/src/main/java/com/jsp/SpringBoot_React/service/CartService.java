@@ -29,7 +29,7 @@ public class CartService {
 	@Autowired
 	private CartItemRepository cartItemRepository;
 
-	@Transactional(timeout = 3, isolation = Isolation.SERIALIZABLE)
+	
 	public void addToCart(Long userId, Long productId, int quantity) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
@@ -39,9 +39,9 @@ public class CartService {
 		
 		 int availableStock = product.getRating().getCount();
 
-		    if (availableStock < quantity) {
-		        throw new RuntimeException("Product is out of stock or insufficient stock available.");
-		    }
+//		    if (availableStock < quantity) {
+//		        throw new RuntimeException("Product is out of stock or insufficient stock available.");
+//		    }
 
 
 		// Check if product is already in the cart
@@ -81,16 +81,25 @@ public class CartService {
 
 	@Transactional
 	public void increaseQuantity(Long userId, Long productId) {
-		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+	    User user = userRepository.findById(userId)
+	            .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 
-		CartItem cartItem = user.getCartItems().stream().filter(item -> item.getProduct().getId().equals(productId))
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("Cart item not found for product ID: " + productId));
+	    CartItem cartItem = user.getCartItems().stream()
+	            .filter(item -> item.getProduct().getId().equals(productId))
+	            .findFirst()
+	            .orElseThrow(() -> new RuntimeException("Cart item not found for product ID: " + productId));
 
-		cartItem.setQuantity(cartItem.getQuantity() + 1);
-		cartItemRepository.save(cartItem);
+	    int currentQuantity = cartItem.getQuantity();
+	    int availableStock = cartItem.getProduct().getRating().getCount(); // or getStock()
+
+//	    if (currentQuantity + 1 > availableStock) {
+//	        throw new RuntimeException("Cannot increase quantity. Insufficient stock.");
+//	    }
+
+	    cartItem.setQuantity(currentQuantity + 1);
+	    cartItemRepository.save(cartItem);
 	}
+
 
 	@Transactional
 	public void decreaseQuantity(Long userId, Long productId) {

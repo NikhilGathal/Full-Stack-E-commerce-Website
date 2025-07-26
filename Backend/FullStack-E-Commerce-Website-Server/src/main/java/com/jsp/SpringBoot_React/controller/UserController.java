@@ -189,32 +189,7 @@ public class UserController {
 	    
 	    return ResponseEntity.ok(existingUser);
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	@DeleteMapping("/username/{username}")
+@DeleteMapping("/username/{username}")
 	public ResponseEntity<String> deleteUserByUsername(@PathVariable String username) {
 		Optional<User> userOpt = userRepository.findByUsername(username); // Search by username
 		if (userOpt.isPresent()) {

@@ -1,22 +1,21 @@
-
-import React, { useEffect, useState } from "react";
-import Wishitem from "../components/Wishitem";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllWishItems } from "../store/slices/wishListSlice";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import Wishitem from '../components/Wishitem'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllWishItems } from '../store/slices/wishListSlice'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Wish() {
-  const wishItems = useSelector(getAllWishItems);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
+  const wishItems = useSelector(getAllWishItems)
+  const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchWishItems = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API fetch delay
-      setIsLoading(false);
-    };
-    fetchWishItems();
-  }, []);
+      await new Promise((resolve) => setTimeout(resolve, 1000)) // Simulate API fetch delay
+      setIsLoading(false)
+    }
+    fetchWishItems()
+  }, [])
 
   return (
     <div className="wish-container">
@@ -54,6 +53,5 @@ export default function Wish() {
         </main>
       )}
     </div>
-  );
+  )
 }
-
