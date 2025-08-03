@@ -32,6 +32,12 @@
   --elements-colorhero: hsl(209, 23%, 22%);
 }
 
+@media(max-width:460px)
+{
+  .hero-container { 
+    padding-inline: 16px;
+  }
+}
 .background-pattern {
   position: absolute;
   height: 700px;
