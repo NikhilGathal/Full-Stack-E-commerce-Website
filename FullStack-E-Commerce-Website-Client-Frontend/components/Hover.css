@@ -1,0 +1,169 @@
+.heading-container {
+  --background-color: white;
+  --text-color: black;
+  --elements-color: white;
+  position: relative;
+}
+
+.heading-container.dark {
+  --background-color: #2c4760;
+  --text-color: white;
+  --elements-color: hsl(209, 23%, 22%);
+}
+
+.heading {
+  cursor: pointer; /* Adds a pointer to indicate interactivity */
+}
+
+.heading:hover {
+  color: #a870f1;
+}
+
+#wel:hover 
+{
+  cursor: default;
+}
+
+.suggestion-box {
+  position: absolute;
+  top: 46px; 
+  left: -32px;
+  background-color: var(
+    --background-color
+  ); /* Background color for the suggestion box */
+  color: var(--text-color); /* Text color */
+  padding: 6px;
+  font-size: 15px !important;
+  font-weight: 550;
+  border-radius: 4px;
+  box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.2); /* Adds shadow for a popup effect */
+  display: none;
+  z-index: 10; /* Ensures the box appears above other content */
+  width: max-content; /* Adjust width based on content */
+}
+.suggestion-box-home {
+  position: absolute;
+  top: 50px;
+  left: -17px;
+  background-color: var(
+    --background-color
+  ); /* Background color for the suggestion box */
+  color: var(--text-color); /* Text color */
+  padding: 6px;
+  font-size: 15px !important;
+  font-weight: 550;
+  border-radius: 4px;
+  box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.2); /* Adds shadow for a popup effect */
+  display: none;
+  z-index: 10; /* Ensures the box appears above other content */
+  width: max-content; /* Adjust width based on content */
+}
+.suggestion-box p {
+  cursor: pointer;
+  margin: 4.5px;
+}
+.suggestion-box-home p {
+  cursor: pointer;
+  margin: 4.5px;
+}
+
+.heading-container:hover .suggestion-box {
+  display: block; /* Shows the box on hover */
+}
+
+.sections-container {
+  position: relative;
+  /* display: inline-block; */
+}
+
+.sections-container:hover .suggestion-box-home {
+  display: block;
+}
+
+@media  (max-width: 697px) {
+  .suggestion-box {
+    top: 23.5px !important;
+    left: -6px !important;
+    padding: 2px !important;
+    font-size: 9px !important ;
+    padding-inline: 7px !important;
+  }
+  .suggestion-box p 
+  {
+    margin: 4px;
+    font-size: 6.8px !important ;
+    line-height: 1.5 ;
+  }
+
+  .suggestion-box-home {
+    top: 23.5px !important;
+    left: 0px !important;
+    padding: 2px !important;
+    font-size: 9px !important ;
+    padding-inline: 7px !important;
+  }
+  .suggestion-box-home p 
+  {
+    margin: 4px;
+    font-size: 6.8px !important ;
+    line-height: 1.5 ;
+  }
+
+
+
+}
+
+@media  (max-width: 440px) {
+  .suggestion-box {
+    top: 20px !important;
+    left: -14px !important;
+    padding-inline: 2.7px !important;
+    font-size: 10px !important ;
+  }
+  .suggestion-box p 
+  {
+    margin: 1px;
+    font-size: 10px !important ;
+  }
+  .suggestion-box-home {
+    top: 22px !important;
+    left: -8.8px !important;
+    padding-inline: 1.5px !important;
+    font-size: 12px !important ;
+  }
+  .suggestion-box-home p 
+  {
+    margin: 1px;
+    font-size: 10px !important ;
+  }
+}
+
+
+
+@media (max-width: 1024px) {
+  .suggestion-box {
+    top: 37px;
+     left: -19px;
+    padding: 5px;
+    font-size: 11px !important;
+  }
+  .suggestion-box-home {
+    top: 40px;
+    left: -15px;
+    padding: 5px;
+    font-size: 11px !important;
+  }
+}
+
+@media (min-width: 697px) and (max-width: 805px) {
+  .suggestion-box {
+    top: 28px;
+    left: -20px;
+    font-size: 9px !important;
+  }
+  .suggestion-box-home {
+    top: 28px;
+    left: -17px;
+     font-size: 9px !important;
+  }
+}
