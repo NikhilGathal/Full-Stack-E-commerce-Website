@@ -47,11 +47,11 @@ A full-stack, single-page e-commerce application built with **React**, **Redux**
 
 ### Frontend
 
-Asset/ # Static images
-Components/ # Reusable React Components
-About.jsx, About-contact.css
-AddNewProduct.jsx, AddNewProduct.css
-AdminDashBoard.jsx
+- Asset/ # Static images
+- Components/ # Reusable React Components
+- About.jsx, About-contact.css
+- AddNewProduct.jsx, AddNewProduct.css
+- AdminDashBoard.jsx
 Banner.jsx, Banner.css
 Carousel.jsx
 CarouselPage.jsx
