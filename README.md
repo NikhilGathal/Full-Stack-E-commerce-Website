@@ -47,20 +47,20 @@ A full-stack, single-page e-commerce application built with **React**, **Redux**
 
 ### Frontend
 
-Asset/ # Static images
-Components/ # Reusable React Components
+- Asset/ # Static images
+- Components/ # Reusable React Components
 About.jsx, About-contact.css, AddNewProduct.jsx, AddNewProduct.css, AdminDashBoard.jsx, Banner.jsx, Banner.css, Carousel.jsx, CarouselPage.jsx, CartItem.jsx, Category.jsx, Category.css, Contact.jsx, ContactForm.jsx, Diwali.jsx, EditUser.jsx, EditUser.css, EmailList.jsx, EmailList.css, ErrorFallback.jsx,  FeedbackList.jsx, FeedbackList.css, Footer.jsx, Footer.css, Hamburger.jsx, Header.jsx, Hero.jsx, Hero.css, Hover.css, Imagecontainer.jsx, Imagecontainer.css, ItemDetail.jsx, ItemDetail.css, ModalLogin.jsx, ModalLogin.css, ModalSign.jsx, ModalSign.css, MyOrdersItem.jsx, OrderCancelConfirm.jsx, OrderConfirmation.jsx, OrderList.css, OutOfStockProducts.jsx, Product.jsx, ProductShimmer.jsx, ProductShimmer.css, SearchBar.jsx, SelectMenu.jsx, SelectProducts.jsx, SelectProducts.css, style.css, Subscribe.jsx, Subscribe.css, Testimonial.jsx, Testimonial.css, TopProducts.jsx, TopProducts.css, UpdateProduct.jsx, WishItem.jsx
-Pages/
+- Pages/
 Cart.jsx
 Home.jsx
 MyOrders.jsx
 Root.jsx
 Wish.jsx
-src/
+- src/
 App.css
 Main.jsx
 App.jsx
-store/
+- store/
 index.js
 productlist.js
 slices/
