@@ -74,6 +74,7 @@ src/
 ├── config/
 - JacksonConfig.java
 - WebConfig.java
+  
 ├── controller/
 - CartController.java
 - FeedbackController.java
@@ -83,12 +84,14 @@ src/
 - TopProductController.java
 - UserController.java
 - WishlistController.java
+  
 ├── dto/
 - LoginResponse.java
 - MyOrderDTO.java
 - OrderRequest.java
 - ProductDTO.java
 - UserDto.java
+  
 ├── entity/
 - CartItem.java
 - Feedback.java
@@ -100,6 +103,7 @@ src/
 - TopProduct.java
 - User.java
 - WishlistItem.java
+  
 ├── repository/
 - CartItemRepository.java
 - FeedbackRepository.java
@@ -109,6 +113,7 @@ src/
 - TopProductRepository.java
 - UserRepository.java
 - WishlistItemRepository.java
+  
 ├── service/
 - CartService.java
 - FeedbackService.java
@@ -118,6 +123,7 @@ src/
 - TopProductService.java
 - UserService.java
 - WishlistItemService.java
+  
 pom.xml # Maven build configuration
 
 
